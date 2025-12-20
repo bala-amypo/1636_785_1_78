@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 public class VolunteerProfile {
@@ -10,17 +9,11 @@ public class VolunteerProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String volunteerId;
+    private String volunteerId;  
     private String fullName;
     private String email;
     private String phone;
     private String availabilityStatus;
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    public void setTime() {
-        createdAt = LocalDateTime.now();
-    }
 
     public Long getId() {
         return id;
@@ -68,9 +61,5 @@ public class VolunteerProfile {
 
     public void setAvailabilityStatus(String availabilityStatus) {
         this.availabilityStatus = availabilityStatus;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 }

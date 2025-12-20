@@ -31,6 +31,7 @@ public class VolunteerProfileServiceImpl implements VolunteerProfileService {
 
     @Override
     public VolunteerProfile findByVolunteerId(String volunteerId) {
+        if (volunteerId == null) return null;
         return repo.findByVolunteerId(volunteerId);
     }
 
