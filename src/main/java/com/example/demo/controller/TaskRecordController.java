@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
-import com.example.demo.entity.TaskRecord;
+import com.example.demo.model.TaskRecord;
 import com.example.demo.service.TaskRecordService;
 
 @RestController
