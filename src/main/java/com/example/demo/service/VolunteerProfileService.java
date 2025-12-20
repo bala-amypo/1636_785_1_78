@@ -4,7 +4,14 @@ import java.util.List;
 import com.example.demo.entity.VolunteerProfile;
 
 public interface VolunteerProfileService {
-    VolunteerProfile postData(VolunteerProfile v);
-    VolunteerProfile getData(Long id);
-    List<VolunteerProfile> getAll();
+
+    VolunteerProfile createVolunteer(VolunteerProfile profile);
+
+    VolunteerProfile getVolunteerById(Long id);
+
+    List<VolunteerProfile> getAllVolunteers();
+
+    VolunteerProfile findByVolunteerId(String volunteerId);
+
+    VolunteerProfile updateAvailability(Long id, String availabilityStatus);
 }

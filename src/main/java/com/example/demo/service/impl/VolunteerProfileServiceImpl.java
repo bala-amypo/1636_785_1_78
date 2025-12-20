@@ -14,15 +14,33 @@ public class VolunteerProfileServiceImpl implements VolunteerProfileService {
     @Autowired
     VolunteerProfileRepository repo;
 
-    public VolunteerProfile postData(VolunteerProfile v) {
-        return repo.save(v);
+    @Override
+    public VolunteerProfile createVolunteer(VolunteerProfile profile) {
+        return repo.save(profile);
     }
 
-    public VolunteerProfile getData(Long id) {
+    @Override
+    public VolunteerProfile getVolunteerById(Long id) {
         return repo.findById(id).orElse(null);
     }
 
-    public List<VolunteerProfile> getAll() {
+    @Override
+    public List<VolunteerProfile> getAllVolunteers() {
         return repo.findAll();
+    }
+
+    @Override
+    public VolunteerProfile findByVolunteerId(String volunteerId) {
+        return repo.findByVolunteerId(volunteerId);
+    }
+
+    @Override
+    public VolunteerProfile updateAvailability(Long id, String availabilityStatus) {
+        VolunteerProfile v = repo.findById(id).orElse(null);
+        if (v != null) {
+            v.setAvailabilityStatus(availabilityStatus);
+            return repo.save(v);
+        }
+        return null;
     }
 }

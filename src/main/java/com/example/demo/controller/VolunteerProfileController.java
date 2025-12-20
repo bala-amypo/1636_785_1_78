@@ -8,24 +8,41 @@ import com.example.demo.entity.VolunteerProfile;
 import com.example.demo.service.VolunteerProfileService;
 
 @RestController
-@RequestMapping("/volunteer")
+@RequestMapping("/api/volunteers")
 public class VolunteerProfileController {
 
     @Autowired
     VolunteerProfileService service;
 
-    @PostMapping("/post")
-    public VolunteerProfile post(@RequestBody VolunteerProfile v) {
-        return service.postData(v);
+    // POST /api/volunteers
+    @PostMapping
+    public VolunteerProfile create(@RequestBody VolunteerProfile profile) {
+        return service.createVolunteer(profile);
     }
 
-    @GetMapping("/get/{id}")
-    public VolunteerProfile get(@PathVariable Long id) {
-        return service.getData(id);
+    // GET /api/volunteers/{id}
+    @GetMapping("/{id}")
+    public VolunteerProfile getById(@PathVariable Long id) {
+        return service.getVolunteerById(id);
     }
 
-    @GetMapping("/all")
-    public List<VolunteerProfile> all() {
-        return service.getAll();
+    // GET /api/volunteers
+    @GetMapping
+    public List<VolunteerProfile> getAll() {
+        return service.getAllVolunteers();
+    }
+
+    // PUT /api/volunteers/{id}/availability
+    @PutMapping("/{id}/availability")
+    public VolunteerProfile updateAvailability(
+            @PathVariable Long id,
+            @RequestParam String availabilityStatus) {
+        return service.updateAvailability(id, availabilityStatus);
+    }
+
+    // GET /api/volunteers/lookup/{volunteerId}
+    @GetMapping("/lookup/{volunteerId}")
+    public VolunteerProfile lookup(@PathVariable String volunteerId) {
+        return service.findByVolunteerId(volunteerId);
     }
 }
