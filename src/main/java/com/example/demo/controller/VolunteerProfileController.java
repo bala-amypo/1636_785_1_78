@@ -14,25 +14,21 @@ public class VolunteerProfileController {
     @Autowired
     VolunteerProfileService service;
 
-    // POST /api/volunteers
     @PostMapping
     public VolunteerProfile create(@RequestBody VolunteerProfile profile) {
         return service.createVolunteer(profile);
     }
 
-    // GET /api/volunteers/{id}
     @GetMapping("/{id}")
     public VolunteerProfile getById(@PathVariable Long id) {
         return service.getVolunteerById(id);
     }
 
-    // GET /api/volunteers
     @GetMapping
     public List<VolunteerProfile> getAll() {
         return service.getAllVolunteers();
     }
 
-    // PUT /api/volunteers/{id}/availability
     @PutMapping("/{id}/availability")
     public VolunteerProfile updateAvailability(
             @PathVariable Long id,
@@ -40,7 +36,6 @@ public class VolunteerProfileController {
         return service.updateAvailability(id, availabilityStatus);
     }
 
-    // GET /api/volunteers/lookup/{volunteerId}
     @GetMapping("/lookup/{volunteerId}")
     public VolunteerProfile lookup(@PathVariable String volunteerId) {
         return service.findByVolunteerId(volunteerId);
