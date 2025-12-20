@@ -23,6 +23,10 @@ public class TaskRecord {
         createdAt = LocalDateTime.now();
         status = "OPEN";
     }
+    public void setStatus(String status) {
+    this.status = status;
+}
+
 
     public Long getId() {
         return id;
