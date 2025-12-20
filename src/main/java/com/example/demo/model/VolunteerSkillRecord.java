@@ -1,5 +1,9 @@
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "volunteer_skill_records")
 public class VolunteerSkillRecord {
 
     @Id
@@ -9,22 +13,55 @@ public class VolunteerSkillRecord {
     private Long volunteerId;
     private String skillName;
     private String skillLevel;
-    private boolean certified;
+    private Boolean certified;
     private LocalDateTime updatedAt;
 
     @PrePersist
-    @PreUpdate
-    void onUpdate() {
+    public void setTime() {
         updatedAt = LocalDateTime.now();
     }
 
-    public VolunteerSkillRecord() {}
+    public Long getId() {
+        return id;
+    }
 
-    public VolunteerSkillRecord(Long volunteerId, String skillName,
-                                String skillLevel, boolean certified) {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getVolunteerId() {
+        return volunteerId;
+    }
+
+    public void setVolunteerId(Long volunteerId) {
         this.volunteerId = volunteerId;
+    }
+
+    public String getSkillName() {
+        return skillName;
+    }
+
+    public void setSkillName(String skillName) {
         this.skillName = skillName;
+    }
+
+    public String getSkillLevel() {
+        return skillLevel;
+    }
+
+    public void setSkillLevel(String skillLevel) {
         this.skillLevel = skillLevel;
+    }
+
+    public Boolean getCertified() {
+        return certified;
+    }
+
+    public void setCertified(Boolean certified) {
         this.certified = certified;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }

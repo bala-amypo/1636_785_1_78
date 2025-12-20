@@ -1,5 +1,9 @@
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "assignment_evaluation_records")
 public class AssignmentEvaluationRecord {
 
     @Id
@@ -12,15 +16,39 @@ public class AssignmentEvaluationRecord {
     private LocalDateTime evaluatedAt;
 
     @PrePersist
-    void onCreate() {
+    public void setTime() {
         evaluatedAt = LocalDateTime.now();
     }
 
-    public AssignmentEvaluationRecord() {}
+    public Long getId() {
+        return id;
+    }
 
-    public AssignmentEvaluationRecord(Long assignmentId, Integer rating, String feedback) {
+    public Long getAssignmentId() {
+        return assignmentId;
+    }
+
+    public void setAssignmentId(Long assignmentId) {
         this.assignmentId = assignmentId;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
         this.rating = rating;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(String feedback) {
         this.feedback = feedback;
+    }
+
+    public LocalDateTime getEvaluatedAt() {
+        return evaluatedAt;
     }
 }

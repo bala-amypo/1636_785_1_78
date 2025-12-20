@@ -1,5 +1,9 @@
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "task_assignment_records")
 public class TaskAssignmentRecord {
 
     @Id
@@ -13,16 +17,44 @@ public class TaskAssignmentRecord {
     private LocalDateTime assignedAt;
 
     @PrePersist
-    void onCreate() {
+    public void setTime() {
         assignedAt = LocalDateTime.now();
-        if (status == null) status = "ACTIVE";
+        status = "ACTIVE";
     }
 
-    public TaskAssignmentRecord() {}
+    public Long getId() {
+        return id;
+    }
 
-    public TaskAssignmentRecord(Long taskId, Long volunteerId, String status) {
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Long taskId) {
         this.taskId = taskId;
+    }
+
+    public Long getVolunteerId() {
+        return volunteerId;
+    }
+
+    public void setVolunteerId(Long volunteerId) {
         this.volunteerId = volunteerId;
-        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public LocalDateTime getAssignedAt() {
+        return assignedAt;
     }
 }

@@ -1,8 +1,9 @@
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
 @Entity
-@Table(
-    name = "task_records",
-    uniqueConstraints = @UniqueConstraint(columnNames = "taskCode")
-)
 public class TaskRecord {
 
     @Id
@@ -18,10 +19,64 @@ public class TaskRecord {
     private LocalDateTime createdAt;
 
     @PrePersist
-    void onCreate() {
+    public void setTime() {
         createdAt = LocalDateTime.now();
-        if (status == null) status = "OPEN";
+        status = "OPEN";
     }
 
-    public TaskRecord() {}
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTaskCode() {
+        return taskCode;
+    }
+
+    public void setTaskCode(String taskCode) {
+        this.taskCode = taskCode;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    public String getRequiredSkill() {
+        return requiredSkill;
+    }
+
+    public void setRequiredSkill(String requiredSkill) {
+        this.requiredSkill = requiredSkill;
+    }
+
+    public String getRequiredSkillLevel() {
+        return requiredSkillLevel;
+    }
+
+    public void setRequiredSkillLevel(String requiredSkillLevel) {
+        this.requiredSkillLevel = requiredSkillLevel;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }
