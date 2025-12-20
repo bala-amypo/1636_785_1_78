@@ -14,25 +14,26 @@ public class TaskRecordController {
     @Autowired
     private TaskRecordService service;
 
-    // ✅ CREATE TASK
     @PostMapping
     public TaskRecord createTask(@RequestBody TaskRecord task) {
         return service.createTask(task);
     }
 
-    // ✅ GET TASK BY ID
     @GetMapping("/{id}")
-    public TaskRecord getTask(@PathVariable Long id) {
+    public TaskRecord getTaskById(@PathVariable Long id) {
         return service.getTaskById(id);
     }
 
-    // ✅ GET ALL TASKS
+    @GetMapping("/code/{taskCode}")
+    public TaskRecord getByCode(@PathVariable String taskCode) {
+        return service.getTaskByCode(taskCode);
+    }
+
     @GetMapping
     public List<TaskRecord> getAllTasks() {
         return service.getAllTasks();
     }
 
-    // ✅ UPDATE TASK STATUS
     @PutMapping("/{id}/status")
     public TaskRecord updateStatus(
             @PathVariable Long id,
