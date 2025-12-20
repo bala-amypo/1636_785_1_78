@@ -17,7 +17,7 @@ public class TaskAssignmentServiceImpl implements TaskAssignmentService {
     public TaskAssignmentRecord assignTask(Long taskId) {
         TaskAssignmentRecord a = new TaskAssignmentRecord();
         a.setTaskId(taskId);
-        a.setVolunteerId(1L); // simplified auto-assign
+        a.setVolunteerId(1L); 
         return repo.save(a);
     }
 
