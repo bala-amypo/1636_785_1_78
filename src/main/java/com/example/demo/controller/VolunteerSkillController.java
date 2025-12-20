@@ -14,25 +14,21 @@ public class VolunteerSkillController {
     @Autowired
     VolunteerSkillService service;
 
-    // POST /api/skills
     @PostMapping
     public VolunteerSkillRecord addOrUpdate(@RequestBody VolunteerSkillRecord skill) {
         return service.addOrUpdateSkill(skill);
     }
 
-    // GET /api/skills/volunteer/{volunteerId}
     @GetMapping("/volunteer/{volunteerId}")
     public List<VolunteerSkillRecord> getByVolunteer(@PathVariable Long volunteerId) {
         return service.getSkillsByVolunteer(volunteerId);
     }
 
-    // GET /api/skills/{id}
     @GetMapping("/{id}")
     public VolunteerSkillRecord getById(@PathVariable Long id) {
         return service.getSkillById(id);
     }
 
-    // GET /api/skills
     @GetMapping
     public List<VolunteerSkillRecord> getAll() {
         return service.getAllSkills();

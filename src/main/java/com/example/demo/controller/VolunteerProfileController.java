@@ -29,7 +29,6 @@ public class VolunteerProfileController {
         return service.getAllVolunteers();
     }
 
-    // 🔥 FIXED LOOKUP API
     @GetMapping("/lookup/{volunteerId}")
     public VolunteerProfile lookup(@PathVariable String volunteerId) {
         return service.findByVolunteerId(volunteerId);
