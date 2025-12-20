@@ -7,11 +7,11 @@ public interface TaskRecordService {
 
     TaskRecord createTask(TaskRecord task);
 
-    TaskRecord updateTask(Long id, TaskRecord updated);
+    TaskRecord getTaskById(Long id);
 
-    List<TaskRecord> getOpenTasks();
-
-    TaskRecord getTaskByCode(String code);
+    TaskRecord getTaskByCode(String taskCode);
 
     List<TaskRecord> getAllTasks();
+
+    TaskRecord updateStatus(Long id, String status);
 }

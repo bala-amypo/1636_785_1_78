@@ -12,36 +12,31 @@ import com.example.demo.service.TaskRecordService;
 public class TaskRecordController {
 
     @Autowired
-    TaskRecordService service;
+    private TaskRecordService service;
 
-    // POST /api/tasks
+    // ✅ CREATE TASK
     @PostMapping
-    public TaskRecord create(@RequestBody TaskRecord task) {
+    public TaskRecord createTask(@RequestBody TaskRecord task) {
         return service.createTask(task);
     }
 
-    // PUT /api/tasks/{id}
-    @PutMapping("/{id}")
-    public TaskRecord update(@PathVariable Long id,
-                             @RequestBody TaskRecord task) {
-        return service.updateTask(id, task);
-    }
-
-    // GET /api/tasks/open
-    @GetMapping("/open")
-    public List<TaskRecord> openTasks() {
-        return service.getOpenTasks();
-    }
-
-    // GET /api/tasks/{id}
+    // ✅ GET TASK BY ID
     @GetMapping("/{id}")
-    public TaskRecord getById(@PathVariable Long id) {
-        return service.updateTask(id, new TaskRecord());
+    public TaskRecord getTask(@PathVariable Long id) {
+        return service.getTaskById(id);
     }
 
-    // GET /api/tasks
+    // ✅ GET ALL TASKS
     @GetMapping
-    public List<TaskRecord> getAll() {
+    public List<TaskRecord> getAllTasks() {
         return service.getAllTasks();
+    }
+
+    // ✅ UPDATE TASK STATUS
+    @PutMapping("/{id}/status")
+    public TaskRecord updateStatus(
+            @PathVariable Long id,
+            @RequestParam String status) {
+        return service.updateStatus(id, status);
     }
 }

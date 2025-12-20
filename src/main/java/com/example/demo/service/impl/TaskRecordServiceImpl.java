@@ -12,34 +12,35 @@ import com.example.demo.service.TaskRecordService;
 public class TaskRecordServiceImpl implements TaskRecordService {
 
     @Autowired
-    TaskRecordRepository repo;
+    private TaskRecordRepository repo;
 
+    @Override
     public TaskRecord createTask(TaskRecord task) {
         return repo.save(task);
     }
 
-    public TaskRecord updateTask(Long id, TaskRecord updated) {
-        TaskRecord t = repo.findById(id).orElse(null);
-        if (t != null) {
-            t.setTaskName(updated.getTaskName());
-            t.setRequiredSkill(updated.getRequiredSkill());
-            t.setRequiredSkillLevel(updated.getRequiredSkillLevel());
-            t.setPriority(updated.getPriority());
-            t.setStatus(updated.getStatus());
-            return repo.save(t);
-        }
-        return null;
+    @Override
+    public TaskRecord getTaskById(Long id) {
+        return repo.findById(id).orElse(null);
     }
 
-    public List<TaskRecord> getOpenTasks() {
-        return repo.findByStatus("OPEN");
+    @Override
+    public TaskRecord getTaskByCode(String taskCode) {
+        return repo.findByTaskCode(taskCode);
     }
 
-    public TaskRecord getTaskByCode(String code) {
-        return repo.findByTaskCode(code);
-    }
-
+    @Override
     public List<TaskRecord> getAllTasks() {
         return repo.findAll();
+    }
+
+    @Override
+    public TaskRecord updateStatus(Long id, String status) {
+        TaskRecord task = repo.findById(id).orElse(null);
+        if (task != null) {
+            task.setStatus(status);
+            return repo.save(task);
+        }
+        return null;
     }
 }
