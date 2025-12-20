@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
-import com.example.demo.entity.TaskAssignmentRecord;
+import com.example.demo.model.TaskAssignmentRecord;
 import com.example.demo.repository.TaskAssignmentRecordRepository;
 import com.example.demo.service.TaskAssignmentService;
 
