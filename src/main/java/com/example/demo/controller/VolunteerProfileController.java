@@ -29,15 +29,16 @@ public class VolunteerProfileController {
         return service.getAllVolunteers();
     }
 
+    // 🔥 FIXED LOOKUP API
+    @GetMapping("/lookup/{volunteerId}")
+    public VolunteerProfile lookup(@PathVariable String volunteerId) {
+        return service.findByVolunteerId(volunteerId);
+    }
+
     @PutMapping("/{id}/availability")
     public VolunteerProfile updateAvailability(
             @PathVariable Long id,
             @RequestParam String availabilityStatus) {
         return service.updateAvailability(id, availabilityStatus);
-    }
-
-    @GetMapping("/lookup/{volunteerId}")
-    public VolunteerProfile lookup(@PathVariable String volunteerId) {
-        return service.findByVolunteerId(volunteerId);
     }
 }
