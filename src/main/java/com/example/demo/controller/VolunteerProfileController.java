@@ -1,38 +1,31 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.AvailabilityUpdateRequest;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.model.VolunteerProfile;
-import com.example.demo.service.VolunteerProfileService;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
+import com.example.demo.entity.VolunteerProfile;
+import com.example.demo.service.VolunteerProfileService;
+
 @RestController
-@RequestMapping("/volunteers")
+@RequestMapping("/volunteer")
 public class VolunteerProfileController {
 
-    private final VolunteerProfileService service;
+    @Autowired
+    VolunteerProfileService service;
 
-    public VolunteerProfileController(VolunteerProfileService service) {
-        this.service = service;
+    @PostMapping("/post")
+    public VolunteerProfile post(@RequestBody VolunteerProfile v) {
+        return service.postData(v);
     }
 
-    @PostMapping
-    public VolunteerProfile registerVolunteer(
-            @RequestBody RegisterRequest request) {
-        return service.registerVolunteer(request);
+    @GetMapping("/get/{id}")
+    public VolunteerProfile get(@PathVariable Long id) {
+        return service.getData(id);
     }
 
-    @PatchMapping("/{id}/availability")
-    public VolunteerProfile updateAvailability(
-            @PathVariable Long id,
-            @RequestBody AvailabilityUpdateRequest request) {
-        return service.updateAvailability(id, request.getAvailabilityStatus());
-    }
-
-    @GetMapping("/available")
-    public List<VolunteerProfile> getAvailableVolunteers() {
-        return service.getAvailableVolunteers();
+    @GetMapping("/all")
+    public List<VolunteerProfile> all() {
+        return service.getAll();
     }
 }

@@ -1,15 +1,10 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.model.VolunteerProfile;
-
 import java.util.List;
+import com.example.demo.entity.VolunteerProfile;
 
 public interface VolunteerProfileService {
-
-    VolunteerProfile registerVolunteer(RegisterRequest request);
-
-    VolunteerProfile updateAvailability(Long volunteerId, String availabilityStatus);
-
-    List<VolunteerProfile> getAvailableVolunteers();
+    VolunteerProfile postData(VolunteerProfile v);
+    VolunteerProfile getData(Long id);
+    List<VolunteerProfile> getAll();
 }

@@ -1,70 +1,28 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.model.VolunteerProfile;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
+import com.example.demo.entity.VolunteerProfile;
 import com.example.demo.repository.VolunteerProfileRepository;
 import com.example.demo.service.VolunteerProfileService;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class VolunteerProfileServiceImpl implements VolunteerProfileService {
 
-    private final VolunteerProfileRepository repository;
+    @Autowired
+    VolunteerProfileRepository repo;
 
-    public VolunteerProfileServiceImpl(VolunteerProfileRepository repository) {
-        this.repository = repository;
+    public VolunteerProfile postData(VolunteerProfile v) {
+        return repo.save(v);
     }
 
-    @Override
-    public VolunteerProfile registerVolunteer(RegisterRequest request) {
-
-        if (request.getName() == null || request.getEmail() == null) {
-            throw new BadRequestException("Name and Email are required");
-        }
-
-        repository.findByEmail(request.getEmail()).ifPresent(v -> {
-            throw new BadRequestException("Email already exists");
-        });
-
-        String status = request.getAvailabilityStatus();
-        if (!isValidStatus(status)) {
-            throw new BadRequestException("Invalid availability status");
-        }
-
-        VolunteerProfile volunteer = new VolunteerProfile(
-                request.getName(),
-                request.getEmail(),
-                status
-        );
-
-        return repository.save(volunteer);
+    public VolunteerProfile getData(Long id) {
+        return repo.findById(id).orElse(null);
     }
 
-    @Override
-    public VolunteerProfile updateAvailability(Long volunteerId, String availabilityStatus) {
-
-        if (!isValidStatus(availabilityStatus)) {
-            throw new BadRequestException("Invalid availability status");
-        }
-
-        VolunteerProfile volunteer = repository.findById(volunteerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Volunteer not found"));
-
-        volunteer.setAvailabilityStatus(availabilityStatus);
-        return repository.save(volunteer);
-    }
-
-    @Override
-    public List<VolunteerProfile> getAvailableVolunteers() {
-        return repository.findByAvailabilityStatus("AVAILABLE");
-    }
-
-    private boolean isValidStatus(String status) {
-        return "AVAILABLE".equalsIgnoreCase(status)
-                || "UNAVAILABLE".equalsIgnoreCase(status);
+    public List<VolunteerProfile> getAll() {
+        return repo.findAll();
     }
 }
