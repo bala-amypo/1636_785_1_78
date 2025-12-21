@@ -9,7 +9,6 @@ public class TaskAssignmentRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long taskId;
     private Long volunteerId;
     private String status;

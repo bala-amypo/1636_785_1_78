@@ -9,7 +9,6 @@ public class TaskRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String taskCode;
     private String taskName;
     private String requiredSkill;
@@ -24,10 +23,8 @@ public class TaskRecord {
         status = "OPEN";
     }
     public void setStatus(String status) {
-    this.status = status;
-}
-
-
+        this.status = status;
+    }
     public Long getId() {
         return id;
     }
