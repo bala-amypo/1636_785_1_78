@@ -8,7 +8,6 @@ public class VolunteerProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String volunteerId;  
     private String fullName;
     private String email;
