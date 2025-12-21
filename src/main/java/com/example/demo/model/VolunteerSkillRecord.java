@@ -9,7 +9,6 @@ public class VolunteerSkillRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long volunteerId;
     private String skillName;
     private String skillLevel;
