@@ -3,38 +3,34 @@ package com.example.demo.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 public class JwtTokenProvider {
 
-    @Value("${jwt.secret}")
     private String secretKey;
-
-    @Value("${jwt.expiration}")
     private long validityInMilliseconds;
+
+    public JwtTokenProvider(String secretKey, long validityInMilliseconds) {
+        this.secretKey = secretKey;
+        this.validityInMilliseconds = validityInMilliseconds;
+    }
 
     public String generateToken(Authentication authentication,
                                 long userId,
-                                String username,
-                                String role) {
+                                String username) {
 
-        Map<String, Object> claims = new HashMap<>();
+        Claims claims = Jwts.claims().setSubject(username);
         claims.put("userId", userId);
-        claims.put("role", role);
 
         Date now = new Date();
         Date expiry = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(username)
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -48,8 +44,10 @@ public class JwtTokenProvider {
                 .getBody();
     }
 
+    
     public String getUsernameFromToken(String token) {
-        return getAllClaims(token).getSubject();
+        Claims claims = getAllClaims(token);
+        return claims.getSubject();
     }
 
     public boolean validateToken(String token) {
