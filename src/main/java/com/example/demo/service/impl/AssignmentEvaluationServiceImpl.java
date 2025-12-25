@@ -1,28 +1,37 @@
 package com.example.demo.service.impl;
 
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import java.util.List;
-
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.AssignmentEvaluationRecord;
 import com.example.demo.repository.AssignmentEvaluationRecordRepository;
+import com.example.demo.repository.TaskAssignmentRecordRepository;
 import com.example.demo.service.AssignmentEvaluationService;
 
-@Service
+import java.util.List;
+
 public class AssignmentEvaluationServiceImpl implements AssignmentEvaluationService {
 
-    @Autowired
-    AssignmentEvaluationRecordRepository repo;
+    private final AssignmentEvaluationRecordRepository evalRepo;
+    private final TaskAssignmentRecordRepository assignmentRepo;
 
-    public AssignmentEvaluationRecord evaluateAssignment(AssignmentEvaluationRecord evaluation) {
-        return repo.save(evaluation);
+    public AssignmentEvaluationServiceImpl(
+            AssignmentEvaluationRecordRepository evalRepo,
+            TaskAssignmentRecordRepository assignmentRepo) {
+        this.evalRepo = evalRepo;
+        this.assignmentRepo = assignmentRepo;
     }
 
+    @Override
+    public AssignmentEvaluationRecord evaluateAssignment(
+            AssignmentEvaluationRecord record) {
+
+        assignmentRepo.findById(record.getAssignmentId())
+                .orElseThrow(() -> new BadRequestException("Assignment not found"));
+
+        return evalRepo.save(record);
+    }
+
+    @Override
     public List<AssignmentEvaluationRecord> getEvaluationsByAssignment(Long assignmentId) {
-        return repo.findByAssignmentId(assignmentId);
-    }
-
-    public List<AssignmentEvaluationRecord> getAllEvaluations() {
-        return repo.findAll();
+        return evalRepo.findByAssignmentId(assignmentId);
     }
 }
