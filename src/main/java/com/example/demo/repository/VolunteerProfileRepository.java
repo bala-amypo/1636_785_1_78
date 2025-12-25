@@ -19,3 +19,6 @@ public interface VolunteerProfileRepository {
     Optional<VolunteerProfile> findByVolunteerId(String volunteerId);
 
     List<VolunteerProfile> findAll();
+    
+    List<VolunteerProfile> findByAvailabilityStatus(String status);
+}
