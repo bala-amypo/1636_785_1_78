@@ -1,12 +1,15 @@
 package com.example.demo.model;
 
 public class VolunteerProfile {
+
     private Long id;
     private String volunteerId;
     private String fullName;
     private String email;
     private String phone;
     private String availabilityStatus;
+
+    public VolunteerProfile() {}
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
