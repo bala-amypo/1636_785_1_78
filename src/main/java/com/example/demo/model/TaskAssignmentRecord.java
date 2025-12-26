@@ -19,10 +19,11 @@ public class TaskAssignmentRecord {
 
     @PrePersist
     public void defaultStatus() {
-        if (this.status == null) {
-            this.status = "ACTIVE";
+        if (status == null) {
+            status = "ACTIVE";
         }
     }
+
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
