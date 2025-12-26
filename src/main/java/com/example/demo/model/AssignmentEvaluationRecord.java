@@ -3,10 +3,14 @@ package com.example.demo.model;
 import java.time.LocalDateTime;
 
 public class AssignmentEvaluationRecord {
+    private Long id;
     private Long assignmentId;
     private Integer rating;
     private String feedback;
     private LocalDateTime evaluatedAt = LocalDateTime.now();
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public Long getAssignmentId() { return assignmentId; }
     public void setAssignmentId(Long assignmentId) { this.assignmentId = assignmentId; }

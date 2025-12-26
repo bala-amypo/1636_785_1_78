@@ -22,6 +22,7 @@ public class VolunteerProfile {
 
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
+
     public String getAvailabilityStatus() { return availabilityStatus; }
     public void setAvailabilityStatus(String availabilityStatus) {
         this.availabilityStatus = availabilityStatus;

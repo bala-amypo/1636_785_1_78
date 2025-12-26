@@ -1,19 +1,12 @@
-package com.example.demo.model;
+package com.example.demo.dto;
 
-import java.time.LocalDateTime;
+public class TaskRecordRequestDTO {
 
-public class TaskRecord {
-    private Long id;
     private String taskCode;
     private String taskName;
     private String requiredSkill;
     private String requiredSkillLevel;
     private String priority;
-    private String status = "OPEN";
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public String getTaskCode() { return taskCode; }
     public void setTaskCode(String taskCode) { this.taskCode = taskCode; }
@@ -31,9 +24,4 @@ public class TaskRecord {
 
     public String getPriority() { return priority; }
     public void setPriority(String priority) { this.priority = priority; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
 }
