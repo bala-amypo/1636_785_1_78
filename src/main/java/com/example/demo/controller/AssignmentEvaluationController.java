@@ -23,7 +23,7 @@ public class AssignmentEvaluationController {
     }
 
     @PostMapping
-    public AssignmentEvaluationRecord evaluate(
+    public AssignmentEvaluationRecord evaluateAssignment(
             @RequestBody AssignmentEvaluationRecord record) {
         return service.evaluateAssignment(record);
     }
@@ -33,9 +33,9 @@ public class AssignmentEvaluationController {
         return service.getAllEvaluations();
     }
 
-    @GetMapping("/assignment/{id}")
-    public List<AssignmentEvaluationRecord> getByAssignment(
-            @PathVariable Long id) {
-        return service.getEvaluationsByAssignment(id);
+    @GetMapping("/assignment/{assignmentId}")
+    public List<AssignmentEvaluationRecord> getEvaluationsByAssignment(
+            @PathVariable Long assignmentId) {
+        return service.getEvaluationsByAssignment(assignmentId);
     }
 }
