@@ -21,11 +21,8 @@ public class VolunteerSkillServiceImpl
     }
 
     @Override
-    public VolunteerSkillRecord addOrUpdateSkill(VolunteerSkillRecord skill) {
-
-        // ✅ MANUAL timestamp (Mockito-safe)
-        skill.setUpdatedAt(java.time.LocalDateTime.now());
-
+    public VolunteerSkillRecord addOrUpdateSkill(
+            VolunteerSkillRecord skill) {
         return repo.save(skill);
     }
 
