@@ -1,36 +1,61 @@
 package com.example.demo.security;
 
-import java.util.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
+@Component
 public class JwtTokenProvider {
 
-    private final String secretKey;
-    private final long validityInMs;
+    private String secretKey;
+    private long validityInMilliseconds;
 
-    public JwtTokenProvider(String secretKey, long validityInMs) {
+    public JwtTokenProvider(String secretKey, long validityInMilliseconds) {
         this.secretKey = secretKey;
-        this.validityInMs = validityInMs;
+        this.validityInMilliseconds = validityInMilliseconds;
     }
 
-    public String generateToken(Authentication auth, Long userId, String role) {
-        return auth.getName() + "|" + userId + "|" + role;
+    public String generateToken(Authentication authentication,
+                                long userId,
+                                String username) {
+
+        Claims claims = Jwts.claims().setSubject(username);
+        claims.put("userId", userId);
+
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + validityInMilliseconds);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(expiry)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
     }
 
+    public Claims getAllClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    // ✅ THIS WAS MISSING
     public String getUsernameFromToken(String token) {
-        return token.split("\\|")[0];
+        Claims claims = getAllClaims(token);
+        return claims.getSubject();
     }
 
     public boolean validateToken(String token) {
-        return token != null && token.contains("|");
-    }
-
-    public Map<String, Object> getAllClaims(String token) {
-        String[] parts = token.split("\\|");
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("email", parts[0]);
-        claims.put("userId", Long.parseLong(parts[1]));
-        claims.put("role", parts[2]);
-        return claims;
+        try {
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
