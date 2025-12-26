@@ -20,24 +20,21 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
 
-    private static final long EXPIRATION = 1000 * 60 * 60;
-
     private Key getKey() {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
     public String generateToken(User user) {
         return Jwts.builder()
-                .setSubject(user.getUsername())   // IMPORTANT
-                .claim("role", user.getRole())
-                .claim("userId", user.getId())
-                .setIssuedAt(new Date())           // ensures different tokens
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .setSubject(user.getUsername())      // username
+                .claim("role", user.getRole())       // role
+                .claim("userId", user.getId())       // userId
+                .setIssuedAt(new Date())              // unique token
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public boolean isTokenValid(String token) {   // METHOD NAME MATTERS
+    public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
                 .setSigningKey(getKey())
