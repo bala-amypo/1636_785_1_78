@@ -115,17 +115,24 @@ public class JwtTokenProvider {
         }
     }
 
-    public String getUsernameFromToken(String token) {
-        return getAllClaims(token).getSubject();
-    }
+ public String getUsernameFromToken(String token) {
+    io.jsonwebtoken.Claims claims = io.jsonwebtoken.Jwts.parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
 
-    public Map<String, Object> getAllClaims(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+    return claims.getSubject();
+}
 
-        return new HashMap<>(claims);
-    }
+   public java.util.Map<String, Object> getAllClaims(String token) {
+    io.jsonwebtoken.Claims claims = io.jsonwebtoken.Jwts.parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+
+    return new java.util.HashMap<>(claims);
+}
+
 }
