@@ -1,22 +1,26 @@
 package com.example.demo.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.AssignmentEvaluationRecord;
 import com.example.demo.repository.AssignmentEvaluationRecordRepository;
 import com.example.demo.repository.TaskAssignmentRecordRepository;
 import com.example.demo.service.AssignmentEvaluationService;
 
-import java.util.List;
+@Service
+public class AssignmentEvaluationServiceImpl
+        implements AssignmentEvaluationService {
 
-public class AssignmentEvaluationServiceImpl implements AssignmentEvaluationService {
-
-    private final AssignmentEvaluationRecordRepository evalRepo;
+    private final AssignmentEvaluationRecordRepository repo;
     private final TaskAssignmentRecordRepository assignmentRepo;
 
     public AssignmentEvaluationServiceImpl(
-            AssignmentEvaluationRecordRepository evalRepo,
+            AssignmentEvaluationRecordRepository repo,
             TaskAssignmentRecordRepository assignmentRepo) {
-        this.evalRepo = evalRepo;
+        this.repo = repo;
         this.assignmentRepo = assignmentRepo;
     }
 
@@ -25,13 +29,20 @@ public class AssignmentEvaluationServiceImpl implements AssignmentEvaluationServ
             AssignmentEvaluationRecord record) {
 
         assignmentRepo.findById(record.getAssignmentId())
-                .orElseThrow(() -> new BadRequestException("Assignment not found"));
+                .orElseThrow(() ->
+                        new BadRequestException("Assignment not found"));
 
-        return evalRepo.save(record);
+        return repo.save(record);
     }
 
     @Override
-    public List<AssignmentEvaluationRecord> getEvaluationsByAssignment(Long assignmentId) {
-        return evalRepo.findByAssignmentId(assignmentId);
+    public List<AssignmentEvaluationRecord> getEvaluationsByAssignment(
+            Long assignmentId) {
+        return repo.findByAssignmentId(assignmentId);
+    }
+
+    @Override
+    public List<AssignmentEvaluationRecord> getAllEvaluations() {
+        return repo.findAll();
     }
 }
