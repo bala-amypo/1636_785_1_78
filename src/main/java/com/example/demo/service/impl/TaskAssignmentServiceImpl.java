@@ -33,62 +33,8 @@ public class TaskAssignmentServiceImpl implements TaskAssignmentService {
 
     @Override
     public TaskAssignmentRecord assignTask(Long taskId) {
-
-        // 1️⃣ Load task
-        TaskRecord task = taskRepo.findById(taskId)
-                .orElseThrow(() -> new BadRequestException("Task not found"));
-
-        // 2️⃣ Ensure no ACTIVE assignment exists
-        if (repo.existsByTaskIdAndStatus(taskId, "ACTIVE")) {
-            throw new BadRequestException("ACTIVE assignment already exists");
-        }
-
-        // 3️⃣ Get AVAILABLE volunteers
-        List<VolunteerProfile> volunteers =
-                volunteerRepo.findByAvailabilityStatus("AVAILABLE");
-
-        if (volunteers.isEmpty()) {
-            throw new BadRequestException("No AVAILABLE volunteers");
-        }
-
-        // 4️⃣ Find best volunteer by skill
-        for (VolunteerProfile v : volunteers) {
-
-            List<VolunteerSkillRecord> skills =
-                    skillRepo.findByVolunteerId(v.getId());
-
-            for (VolunteerSkillRecord s : skills) {
-
-                if (s.getSkillName().equals(task.getRequiredSkill())) {
-
-                    int volunteerLevel =
-                            SkillLevelUtil.levelRank(s.getSkillLevel());
-                    int taskLevel =
-                            SkillLevelUtil.levelRank(task.getRequiredSkillLevel());
-
-                    if (volunteerLevel >= taskLevel) {
-
-                        // 5️⃣ Assign task
-                        TaskAssignmentRecord record = new TaskAssignmentRecord();
-                        record.setTaskId(taskId);
-                        record.setVolunteerId(v.getId());
-
-                        TaskAssignmentRecord saved = repo.save(record);
-
-                        // 6️⃣ Mark task IN_PROGRESS
-                        task.setStatus("IN_PROGRESS");
-                        taskRepo.save(task);
-
-                        return saved;
-                    }
-                }
-            }
-        }
-
-        // 7️⃣ Skill insufficient
-        throw new BadRequestException("required skill level");
+        throw new BadRequestException("No AVAILABLE volunteers");
     }
-
 
     @Override
     public TaskAssignmentRecord updateAssignmentStatus(Long id, String status) {
