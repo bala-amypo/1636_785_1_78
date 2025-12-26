@@ -3,6 +3,7 @@ package com.example.demo.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +12,13 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    private String secretKey;
-    private long validityInMilliseconds;
+    private final String secretKey;
+    private final long validityInMilliseconds;
 
-    public JwtTokenProvider(String secretKey, long validityInMilliseconds) {
+    public JwtTokenProvider(
+            @Value("${jwt.secret}") String secretKey,
+            @Value("${jwt.expiration}") long validityInMilliseconds
+    ) {
         this.secretKey = secretKey;
         this.validityInMilliseconds = validityInMilliseconds;
     }
@@ -44,10 +48,8 @@ public class JwtTokenProvider {
                 .getBody();
     }
 
-    // ✅ THIS WAS MISSING
     public String getUsernameFromToken(String token) {
-        Claims claims = getAllClaims(token);
-        return claims.getSubject();
+        return getAllClaims(token).getSubject();
     }
 
     public boolean validateToken(String token) {
