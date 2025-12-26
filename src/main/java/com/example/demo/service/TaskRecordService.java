@@ -16,6 +16,7 @@ public interface TaskRecordService {
     Optional<TaskRecord> getTaskByCode(String code);
 
     TaskRecord getTaskById(Long id);
+    TaskRecord updateTask(Long id, TaskRecord updatedTask);
 
     TaskRecord updateStatus(Long id, String status);
 }

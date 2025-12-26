@@ -15,4 +15,5 @@ public interface TaskRecordRepository
     Optional<TaskRecord> findByTaskCode(String taskCode);
 
     List<TaskRecord> findByStatus(String status);
+    
 }

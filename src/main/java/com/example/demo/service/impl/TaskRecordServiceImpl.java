@@ -53,4 +53,19 @@ public class TaskRecordServiceImpl implements TaskRecordService {
         task.setStatus(status);
         return repo.save(task);
     }
+
+    @Override
+    public TaskRecord updateTask(Long id, TaskRecord updatedTask) {
+
+        TaskRecord existing = getTaskById(id);
+
+        existing.setTaskName(updatedTask.getTaskName());
+        existing.setRequiredSkill(updatedTask.getRequiredSkill());
+        existing.setRequiredSkillLevel(updatedTask.getRequiredSkillLevel());
+        existing.setPriority(updatedTask.getPriority());
+        existing.setStatus(updatedTask.getStatus());
+
+        return repo.save(existing);
+    }
+
 }
