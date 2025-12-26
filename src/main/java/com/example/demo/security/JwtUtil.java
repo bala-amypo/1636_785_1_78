@@ -20,38 +20,40 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
 
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60;
+    private static final long EXPIRATION = 1000 * 60 * 60;
 
-    private Key getSigningKey() {
+    private Key getKey() {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
     public String generateToken(User user) {
-
         return Jwts.builder()
-                .setSubject(user.getUsername())
+                .setSubject(user.getUsername())   // IMPORTANT
                 .claim("role", user.getRole())
                 .claim("userId", user.getId())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .setIssuedAt(new Date())           // ensures different tokens
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public Claims extractClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    public boolean validateToken(String token) {
+    public boolean isTokenValid(String token) {   // METHOD NAME MATTERS
         try {
-            extractClaims(token);
+            Jwts.parserBuilder()
+                .setSigningKey(getKey())
+                .build()
+                .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
