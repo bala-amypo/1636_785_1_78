@@ -9,10 +9,10 @@ public class SkillLevelUtil {
         return 0;
     }
 
-    public static int priorityRank(String p) {
-        if ("LOW".equals(p)) return 1;
-        if ("MEDIUM".equals(p)) return 2;
-        if ("HIGH".equals(p)) return 3;
+    public static int priorityRank(String priority) {
+        if ("LOW".equals(priority)) return 1;
+        if ("MEDIUM".equals(priority)) return 2;
+        if ("HIGH".equals(priority)) return 3;
         return 0;
     }
 }
