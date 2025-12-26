@@ -3,14 +3,20 @@ package com.example.demo.model;
 import java.time.LocalDateTime;
 
 public class TaskRecord {
+
     private Long id;
     private String taskCode;
     private String taskName;
     private String requiredSkill;
     private String requiredSkillLevel;
     private String priority;
-    private String status = "OPEN";
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private String status;
+    private LocalDateTime createdAt;
+
+    public TaskRecord() {
+        this.status = "OPEN";
+        this.createdAt = LocalDateTime.now();
+    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -22,7 +28,9 @@ public class TaskRecord {
     public void setTaskName(String taskName) { this.taskName = taskName; }
 
     public String getRequiredSkill() { return requiredSkill; }
-    public void setRequiredSkill(String requiredSkill) { this.requiredSkill = requiredSkill; }
+    public void setRequiredSkill(String requiredSkill) {
+        this.requiredSkill = requiredSkill;
+    }
 
     public String getRequiredSkillLevel() { return requiredSkillLevel; }
     public void setRequiredSkillLevel(String requiredSkillLevel) {
