@@ -1,13 +1,31 @@
 package com.example.demo.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+
+@Entity
 public class TaskRecord {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String taskCode;
     private String taskName;
     private String requiredSkill;
     private String requiredSkillLevel;
     private String priority;
-    private String status = "OPEN";
+    private String status;
+
+    @PrePersist
+    public void defaultStatus() {
+        if (this.status == null) {
+            this.status = "OPEN";
+        }
+    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

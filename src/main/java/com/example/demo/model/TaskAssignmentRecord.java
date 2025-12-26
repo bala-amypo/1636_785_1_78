@@ -1,10 +1,28 @@
 package com.example.demo.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+
+@Entity
 public class TaskAssignmentRecord {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long taskId;
     private Long volunteerId;
-    private String status = "ACTIVE";
+    private String status;
+
+    @PrePersist
+    public void defaultStatus() {
+        if (this.status == null) {
+            this.status = "ACTIVE";
+        }
+    }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
