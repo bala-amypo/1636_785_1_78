@@ -32,9 +32,61 @@ public class TaskAssignmentServiceImpl implements TaskAssignmentService {
     }
 
     @Override
-    public TaskAssignmentRecord assignTask(Long taskId) {
+public TaskAssignmentRecord assignTask(Long taskId) {
+
+    // 1️⃣ MUST BE FIRST
+    if (repo.existsByTaskIdAndStatus(taskId, "ACTIVE")) {
+        throw new BadRequestException("ACTIVE assignment");
+    }
+
+    TaskRecord task = taskRepo.findById(taskId)
+            .orElseThrow(() ->
+                    new BadRequestException("Task not found"));
+
+    List<VolunteerProfile> volunteers =
+            volunteerRepo.findByAvailabilityStatus("AVAILABLE");
+
+    if (volunteers.isEmpty()) {
         throw new BadRequestException("No AVAILABLE volunteers");
     }
+
+    for (VolunteerProfile v : volunteers) {
+
+        List<VolunteerSkillRecord> skills =
+                skillRepo.findByVolunteerId(v.getId());
+
+        for (VolunteerSkillRecord s : skills) {
+
+            if (s.getSkillName().equals(task.getRequiredSkill())) {
+
+                int volunteerLevel =
+                        SkillLevelUtil.levelRank(s.getSkillLevel());
+                int taskLevel =
+                        SkillLevelUtil.levelRank(task.getRequiredSkillLevel());
+
+                if (volunteerLevel >= taskLevel) {
+
+                    TaskAssignmentRecord record =
+                            new TaskAssignmentRecord();
+                    record.setTaskId(taskId);
+                    record.setVolunteerId(v.getId());
+                    record.setStatus("ACTIVE"); // ✅ REQUIRED
+
+                    TaskAssignmentRecord saved =
+                            repo.save(record);
+
+                    task.setStatus("IN_PROGRESS");
+                    taskRepo.save(task);
+
+                    return saved;
+                }
+            }
+        }
+    }
+
+    throw new BadRequestException("required skill level");
+}
+
 
     @Override
     public TaskAssignmentRecord updateAssignmentStatus(Long id, String status) {
