@@ -16,7 +16,7 @@ public class RegisterController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/register")   // EXACT path expected
+    @PostMapping("/register")   
     public String register(@RequestBody User user) {
         return jwtUtil.generateToken(user);
     }

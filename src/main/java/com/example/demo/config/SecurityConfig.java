@@ -12,14 +12,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            // ❌ disable csrf (swagger needs this)
+            
             .csrf(csrf -> csrf.disable())
 
-            // ❌ disable default login
+            
             .formLogin(form -> form.disable())
             .httpBasic(basic -> basic.disable())
 
-            // ✅ allow swagger & everything else
+            
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                         "/swagger-ui/**",
