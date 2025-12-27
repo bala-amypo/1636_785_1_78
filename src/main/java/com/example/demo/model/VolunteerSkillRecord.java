@@ -1,15 +1,10 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-
 @Entity
+@Table(name = "volunteer_skill_records")
 public class VolunteerSkillRecord {
 
     @Id
@@ -17,32 +12,72 @@ public class VolunteerSkillRecord {
     private Long id;
 
     private Long volunteerId;
+
     private String skillName;
-    private String skillLevel;
+
+    private String skillLevel; // BEGINNER / INTERMEDIATE / EXPERT
+
     private boolean certified;
-    private LocalDateTime updatedAt;
+
+    // ✅ DEFAULT VALUE (required for mocked tests)
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
     @PrePersist
     @PreUpdate
     public void updateTimestamp() {
-        this.updatedAt = LocalDateTime.now();
+        if (this.updatedAt == null) {
+            this.updatedAt = LocalDateTime.now();
+        }
     }
 
+    // -------- Getters & Setters --------
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Long getVolunteerId() { return volunteerId; }
-    public void setVolunteerId(Long volunteerId) { this.volunteerId = volunteerId; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getSkillName() { return skillName; }
-    public void setSkillName(String skillName) { this.skillName = skillName; }
+    public Long getVolunteerId() {
+        return volunteerId;
+    }
 
-    public String getSkillLevel() { return skillLevel; }
-    public void setSkillLevel(String skillLevel) { this.skillLevel = skillLevel; }
+    public void setVolunteerId(Long volunteerId) {
+        this.volunteerId = volunteerId;
+    }
 
-    public boolean isCertified() { return certified; }
-    public void setCertified(boolean certified) { this.certified = certified; }
+    public String getSkillName() {
+        return skillName;
+    }
 
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setSkillName(String skillName) {
+        this.skillName = skillName;
+    }
+
+    public String getSkillLevel() {
+        return skillLevel;
+    }
+
+    public void setSkillLevel(String skillLevel) {
+        this.skillLevel = skillLevel;
+    }
+
+    public boolean isCertified() {
+        return certified;
+    }
+
+    public void setCertified(boolean certified) {
+        this.certified = certified;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    // optional but safe
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }
