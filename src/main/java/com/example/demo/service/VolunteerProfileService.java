@@ -1,9 +1,9 @@
 package com.example.demo.service;
 
+import com.example.demo.model.VolunteerProfile;
+
 import java.util.List;
 import java.util.Optional;
-
-import com.example.demo.model.VolunteerProfile;
 
 public interface VolunteerProfileService {
 
@@ -15,5 +15,5 @@ public interface VolunteerProfileService {
 
     Optional<VolunteerProfile> findByVolunteerId(String volunteerId);
 
-    VolunteerProfile updateAvailability(Long id, String status);
+    VolunteerProfile updateAvailability(Long id, String availabilityStatus);
 }

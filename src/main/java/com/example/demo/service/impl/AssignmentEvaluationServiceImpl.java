@@ -1,48 +1,48 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.AssignmentEvaluationRecord;
+import com.example.demo.model.TaskAssignmentRecord;
 import com.example.demo.repository.AssignmentEvaluationRecordRepository;
 import com.example.demo.repository.TaskAssignmentRecordRepository;
 import com.example.demo.service.AssignmentEvaluationService;
-
+import org.springframework.stereotype.Service;
+import java.util.List;
 @Service
-public class AssignmentEvaluationServiceImpl
-        implements AssignmentEvaluationService {
+public class AssignmentEvaluationServiceImpl implements AssignmentEvaluationService {
 
-    private final AssignmentEvaluationRecordRepository repo;
+    private final AssignmentEvaluationRecordRepository evalRepo;
     private final TaskAssignmentRecordRepository assignmentRepo;
 
     public AssignmentEvaluationServiceImpl(
-            AssignmentEvaluationRecordRepository repo,
+            AssignmentEvaluationRecordRepository evalRepo,
             TaskAssignmentRecordRepository assignmentRepo) {
-        this.repo = repo;
+
+        this.evalRepo = evalRepo;
         this.assignmentRepo = assignmentRepo;
     }
 
     @Override
-    public AssignmentEvaluationRecord evaluateAssignment(
-            AssignmentEvaluationRecord record) {
+    public AssignmentEvaluationRecord evaluateAssignment(AssignmentEvaluationRecord evaluation) {
 
-        assignmentRepo.findById(record.getAssignmentId())
-                .orElseThrow(() ->
-                        new BadRequestException("Assignment not found"));
+        TaskAssignmentRecord assignment = assignmentRepo.findById(
+                evaluation.getAssignmentId())
+                .orElseThrow(() -> new ResourceNotFoundException("Assignment not found"));
 
-        return repo.save(record);
+        if (!"COMPLETED".equals(assignment.getStatus()))
+            throw new BadRequestException("ACTIVE assignment");
+
+        return evalRepo.save(evaluation);
     }
 
     @Override
-    public List<AssignmentEvaluationRecord> getEvaluationsByAssignment(
-            Long assignmentId) {
-        return repo.findByAssignmentId(assignmentId);
+    public List<AssignmentEvaluationRecord> getEvaluationsByAssignment(Long assignmentId) {
+        return evalRepo.findByAssignmentId(assignmentId);
     }
 
     @Override
     public List<AssignmentEvaluationRecord> getAllEvaluations() {
-        return repo.findAll();
+        return evalRepo.findAll();
     }
 }
