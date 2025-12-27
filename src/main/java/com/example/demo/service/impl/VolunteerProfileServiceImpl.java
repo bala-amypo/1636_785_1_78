@@ -1,63 +1,57 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.VolunteerProfile;
 import com.example.demo.repository.VolunteerProfileRepository;
 import com.example.demo.service.VolunteerProfileService;
-
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
 @Service
-public class VolunteerProfileServiceImpl
-        implements VolunteerProfileService {
+public class VolunteerProfileServiceImpl implements VolunteerProfileService {
 
-    private final VolunteerProfileRepository repo;
+    private final VolunteerProfileRepository repository;
 
-    public VolunteerProfileServiceImpl(VolunteerProfileRepository repo) {
-        this.repo = repo;
+    public VolunteerProfileServiceImpl(VolunteerProfileRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public VolunteerProfile createVolunteer(VolunteerProfile profile) {
 
-        if (repo.existsByEmail(profile.getEmail())) {
+        if (repository.existsByVolunteerId(profile.getVolunteerId()))
+            throw new BadRequestException("VolunteerId already exists");
+
+        if (repository.existsByEmail(profile.getEmail()))
             throw new BadRequestException("Email already exists");
-        }
-        if (repo.existsByVolunteerId(profile.getVolunteerId())) {
-            throw new BadRequestException("Volunteer ID already exists");
-        }
-        if (repo.existsByPhone(profile.getPhone())) {
+
+        if (repository.existsByPhone(profile.getPhone()))
             throw new BadRequestException("Phone already exists");
-        }
 
-        return repo.save(profile);
+        return repository.save(profile);
     }
-
 
     @Override
     public VolunteerProfile getVolunteerById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() ->
-                        new BadRequestException("Volunteer not found"));
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Volunteer not found"));
     }
 
     @Override
     public List<VolunteerProfile> getAllVolunteers() {
-        return repo.findAll();
+        return repository.findAll();
     }
 
     @Override
     public Optional<VolunteerProfile> findByVolunteerId(String volunteerId) {
-        return repo.findByVolunteerId(volunteerId);
+        return repository.findByVolunteerId(volunteerId);
     }
 
     @Override
-    public VolunteerProfile updateAvailability(Long id, String status) {
+    public VolunteerProfile updateAvailability(Long id, String availabilityStatus) {
         VolunteerProfile v = getVolunteerById(id);
-        v.setAvailabilityStatus(status);
-        return repo.save(v);
+        v.setAvailabilityStatus(availabilityStatus);
+        return repository.save(v);
     }
 }
