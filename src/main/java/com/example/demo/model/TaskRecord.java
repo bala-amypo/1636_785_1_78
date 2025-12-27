@@ -1,32 +1,48 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
+@Table(
+        name = "task_records",
+        uniqueConstraints = @UniqueConstraint(columnNames = "taskCode")
+)
 public class TaskRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String taskCode;
+
     private String taskName;
+
     private String requiredSkill;
+
     private String requiredSkillLevel;
-    private String priority;
-    private String status;
+
+    private String priority; // LOW / MEDIUM / HIGH
+
+    // ✅ DEFAULT VALUE FIX (IMPORTANT)
+    private String status = "OPEN"; // OPEN / ASSIGNED / CLOSED
+
+    private LocalDateTime createdAt;
 
     @PrePersist
-    public void defaultStatus() {
+    public void prePersist() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+
+        // safety fallback
         if (this.status == null) {
             this.status = "OPEN";
         }
     }
 
+    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -49,4 +65,6 @@ public class TaskRecord {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
 }

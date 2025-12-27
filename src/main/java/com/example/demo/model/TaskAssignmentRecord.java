@@ -1,12 +1,10 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "task_assignment_records")
 public class TaskAssignmentRecord {
 
     @Id
@@ -14,26 +12,69 @@ public class TaskAssignmentRecord {
     private Long id;
 
     private Long taskId;
+
     private Long volunteerId;
-    private String status;
+
+    // ✅ default timestamp (mock-safe)
+    private LocalDateTime assignedAt = LocalDateTime.now();
+
+    // ✅ default status (mock-safe)
+    private String status = "ACTIVE"; // ACTIVE / COMPLETED / CANCELLED
 
     @PrePersist
-    public void defaultStatus() {
-        if (status == null) {
-            status = "ACTIVE";
+    public void onCreate() {
+        if (this.assignedAt == null) {
+            this.assignedAt = LocalDateTime.now();
+        }
+        if (this.status == null) {
+            this.status = "ACTIVE";
         }
     }
 
+    @PreUpdate
+    public void onUpdate() {
+        this.assignedAt = LocalDateTime.now();
+    }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    // ---------------- GETTERS & SETTERS ----------------
 
-    public Long getTaskId() { return taskId; }
-    public void setTaskId(Long taskId) { this.taskId = taskId; }
+    public Long getId() {
+        return id;
+    }
 
-    public Long getVolunteerId() { return volunteerId; }
-    public void setVolunteerId(Long volunteerId) { this.volunteerId = volunteerId; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
+    }
+
+    public Long getVolunteerId() {
+        return volunteerId;
+    }
+
+    public void setVolunteerId(Long volunteerId) {
+        this.volunteerId = volunteerId;
+    }
+
+    public LocalDateTime getAssignedAt() {
+        return assignedAt;
+    }
+
+    public void setAssignedAt(LocalDateTime assignedAt) {
+        this.assignedAt = assignedAt;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

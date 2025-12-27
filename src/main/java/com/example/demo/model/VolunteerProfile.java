@@ -1,23 +1,49 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
+@Table(
+        name = "volunteer_profiles",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "volunteerId"),
+                @UniqueConstraint(columnNames = "email"),
+                @UniqueConstraint(columnNames = "phone")
+        }
+)
 public class VolunteerProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String volunteerId;
-    private String fullName;
-    private String email;
-    private String phone;
-    private String availabilityStatus;
 
+    @Column(nullable = false)
+    private String fullName;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false, unique = true)
+    private String phone;
+
+    @Column(nullable = false)
+    private String availabilityStatus; // AVAILABLE / BUSY / INACTIVE
+
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        if (this.availabilityStatus == null) {
+            this.availabilityStatus = "AVAILABLE";
+        }
+    }
+
+    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -37,4 +63,6 @@ public class VolunteerProfile {
     public void setAvailabilityStatus(String availabilityStatus) {
         this.availabilityStatus = availabilityStatus;
     }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
 }
