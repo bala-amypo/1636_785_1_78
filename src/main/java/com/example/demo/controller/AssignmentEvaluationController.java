@@ -1,16 +1,10 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.demo.model.AssignmentEvaluationRecord;
 import com.example.demo.service.AssignmentEvaluationService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/evaluations")
@@ -23,19 +17,15 @@ public class AssignmentEvaluationController {
     }
 
     @PostMapping
-    public AssignmentEvaluationRecord evaluateAssignment(
-            @RequestBody AssignmentEvaluationRecord record) {
-        return service.evaluateAssignment(record);
+    public AssignmentEvaluationRecord evaluate(
+            @RequestBody AssignmentEvaluationRecord evaluation) {
+
+        return service.evaluateAssignment(evaluation);
     }
 
     @GetMapping
-    public List<AssignmentEvaluationRecord> getAllEvaluations() {
+    public List<AssignmentEvaluationRecord> all() {
         return service.getAllEvaluations();
     }
-
-    @GetMapping("/assignment/{assignmentId}")
-    public List<AssignmentEvaluationRecord> getEvaluationsByAssignment(
-            @PathVariable Long assignmentId) {
-        return service.getEvaluationsByAssignment(assignmentId);
-    }
 }
+
