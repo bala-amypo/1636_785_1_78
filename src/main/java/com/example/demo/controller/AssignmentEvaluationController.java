@@ -5,11 +5,9 @@ import com.example.demo.service.AssignmentEvaluationService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("/evaluations")
-@SecurityRequirement(name="bearerAuth")
 public class AssignmentEvaluationController {
 
     private final AssignmentEvaluationService service;
