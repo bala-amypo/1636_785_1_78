@@ -24,24 +24,24 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            // ✅ Disable defaults (Swagger + JWT)
+            
             .csrf(csrf -> csrf.disable())
             .formLogin(form -> form.disable())
             .httpBasic(basic -> basic.disable())
 
-            // ✅ Stateless session (JWT)
+           
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
 
-            // ✅ Authorization rules
+            
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()          // 🔓 LOGIN & REGISTER
+                .requestMatchers("/auth/**").permitAll()          
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
             )
 
-            // ✅ JWT filter
+           
             .addFilterBefore(
                 jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class
@@ -50,14 +50,13 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // ✅ AuthenticationManager (required)
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-    // ✅ Password encoder
+   
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

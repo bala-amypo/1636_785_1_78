@@ -77,15 +77,15 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(@RequestBody User user) {
-        // 1. Check if user already exists
+       
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new RuntimeException("Username already taken");
         }
 
-        // 2. Encode the password before saving
+       
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         
-        // 3. Save the user
+       
         userRepository.save(user);
 
         return "User registered successfully!";
