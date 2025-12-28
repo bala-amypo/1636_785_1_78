@@ -8,6 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/assignments")
+@SecurityRequirement(name = "bearerAuth")
 public class TaskAssignmentController {
 
     private final TaskAssignmentService service;

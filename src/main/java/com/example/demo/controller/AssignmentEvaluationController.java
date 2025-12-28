@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/evaluations")
-
+@SecurityRequirement(name = "bearerAuth")
 public class AssignmentEvaluationController {
 
     private final AssignmentEvaluationService service;

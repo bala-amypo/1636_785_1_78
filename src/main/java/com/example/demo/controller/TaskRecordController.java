@@ -8,6 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tasks")
+@SecurityRequirement(name = "bearerAuth")
 public class TaskRecordController {
 
     private final TaskRecordService service;
