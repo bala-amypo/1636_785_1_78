@@ -1,71 +1,3 @@
-// package com.example.demo.security;
-
-// import org.springframework.context.annotation.Bean;
-// import org.springframework.context.annotation.Configuration;
-// import org.springframework.security.authentication.AuthenticationManager;
-// import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-// import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-// import org.springframework.security.crypto.password.PasswordEncoder;
-// import org.springframework.security.web.SecurityFilterChain;
-
-// @Configuration
-// public class SecurityConfig {
-
-//     @Bean
-//         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-//                 http
-//                             // ❌ CSRF disabled (Swagger + POST ku)
-//                                         .csrf(csrf -> csrf.disable())
-
-//                                                     .authorizeHttpRequests(auth -> auth
-
-//                                                                     // ✅ OLD CODE – DO NOT CHANGE
-//                                                                                     .requestMatchers("/hello", "/hello/**").permitAll()
-
-//                                                                                                     // ✅ OLD CODE – Task APIs
-//                                                                                                                     .requestMatchers("/tasks", "/tasks/**").permitAll()
-
-//                                                                                                                                     // ✅ OLD CODE – Swagger
-//                                                                                                                                                     .requestMatchers(
-//                                                                                                                                                                             "/swagger-ui/**",
-//                                                                                                                                                                                                     "/v3/api-docs/**",
-//                                                                                                                                                                                                                             "/swagger-ui.html"
-//                                                                                                                                                                                                                                             ).permitAll()
-
-//                                                                                                                                                                                                                                                             // ✅ OLD CODE – Auth
-//                                                                                                                                                                                                                                                                             .requestMatchers("/auth/**").permitAll()
-
-//                                                                                                                                                                                                                                                                                             // 🔥 EXTRA CODE – ONLY ADDITION
-//                                                                                                                                                                                                                                                                                                             .requestMatchers("/volunteers", "/volunteers/**").permitAll()
-//                                                                                                                                                                                                                                                                                                                             .requestMatchers("/skills", "/skills/**").permitAll()
-//                                                                                                                                                                                                                                                                                                                                             .requestMatchers("/assignments", "/assignments/**").permitAll()
-//                                                                                                                                                                                                                                                                                                                                                             .requestMatchers("/evaluations", "/evaluations/**").permitAll()
-
-//                                                                                                                                                                                                                                                                                                                                                                             // 🔒 Remaining secured
-//                                                                                                                                                                                                                                                                                                                                                                                             .anyRequest().authenticated()
-//                                                                                                                                                                                                                                                                                                                                                                                                         );
-
-//                                                                                                                                                                                                                                                                                                                                                                                                                 return http.build();
-//                                                                                                                                                                                                                                                                                                                                                                                                                     }
-
-//                                                                                                                                                                                                                                                                                                                                                                                                                         // ✅ OLD CODE – AuthenticationManager
-//                                                                                                                                                                                                                                                                                                                                                                                                                             @Bean
-//                                                                                                                                                                                                                                                                                                                                                                                                                                 public AuthenticationManager authenticationManager(
-//                                                                                                                                                                                                                                                                                                                                                                                                                                             AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//                                                                                                                                                                                                                                                                                                                                                                                                                                                     return authenticationConfiguration.getAuthenticationManager();
-//                                                                                                                                                                                                                                                                                                                                                                                                                                                         }
-
-//                                                                                                                                                                                                                                                                                                                                                                                                                                                             // ✅ OLD CODE – Password Encoder
-//                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @Bean
-//                                                                                                                                                                                                                                                                                                                                                                                                                                                                     public PasswordEncoder passwordEncoder() {
-//                                                                                                                                                                                                                                                                                                                                                                                                                                                                             return new BCryptPasswordEncoder();
-//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 }
-//                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 }
-
-
-//swagger
 package com.example.demo.security;
 
 import org.springframework.context.annotation.Bean;
@@ -73,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -91,33 +24,40 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            // 🔥 MUST BE FIRST
+            // ✅ Disable defaults (Swagger + JWT)
             .csrf(csrf -> csrf.disable())
             .formLogin(form -> form.disable())
             .httpBasic(basic -> basic.disable())
 
+            // ✅ Stateless session (JWT)
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+
+            // ✅ Authorization rules
             .authorizeHttpRequests(auth -> auth
-                // 🔥 MUST BE FIRST
-                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()          // 🔓 LOGIN & REGISTER
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
             )
 
-            // 🔥 MUST BE BEFORE UsernamePasswordAuthenticationFilter
+            // ✅ JWT filter
             .addFilterBefore(
-                    jwtAuthenticationFilter,
-                    UsernamePasswordAuthenticationFilter.class
+                jwtAuthenticationFilter,
+                UsernamePasswordAuthenticationFilter.class
             );
 
         return http.build();
     }
 
+    // ✅ AuthenticationManager (required)
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
+    // ✅ Password encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
