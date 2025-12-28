@@ -1,5 +1,3 @@
-
-
 package com.example.demo.model;
 
 import jakarta.persistence.*;
@@ -17,11 +15,11 @@ public class TaskAssignmentRecord {
 
     private Long volunteerId;
 
-   
+    // ✅ default timestamp (mock-safe)
     private LocalDateTime assignedAt = LocalDateTime.now();
 
-    
-    private String status = "ACTIVE"; 
+    // ✅ default status (mock-safe)
+    private String status = "ACTIVE"; // ACTIVE / COMPLETED / CANCELLED
 
     @PrePersist
     public void onCreate() {

@@ -5,10 +5,9 @@ import com.example.demo.service.VolunteerProfileService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping("/volunteers")
-@SecurityRequirement(name="bearerAuth")
 public class VolunteerProfileController {
 
     private final VolunteerProfileService service;

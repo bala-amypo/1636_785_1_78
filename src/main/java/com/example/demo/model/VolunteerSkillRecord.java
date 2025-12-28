@@ -1,5 +1,3 @@
-
-
 package com.example.demo.model;
 
 import jakarta.persistence.*;
@@ -17,11 +15,11 @@ public class VolunteerSkillRecord {
 
     private String skillName;
 
-    private String skillLevel; 
+    private String skillLevel; // BEGINNER / INTERMEDIATE / EXPERT
 
     private boolean certified;
 
-    
+    // ✅ DEFAULT VALUE (required for mocked tests)
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @PrePersist
@@ -32,7 +30,7 @@ public class VolunteerSkillRecord {
         }
     }
 
-   
+    // -------- Getters & Setters --------
 
     public Long getId() {
         return id;
@@ -78,7 +76,7 @@ public class VolunteerSkillRecord {
         return updatedAt;
     }
 
-   
+    // optional but safe
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
