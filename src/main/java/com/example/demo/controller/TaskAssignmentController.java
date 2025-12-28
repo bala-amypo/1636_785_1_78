@@ -5,9 +5,10 @@ import com.example.demo.service.TaskAssignmentService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @RestController
 @RequestMapping("/assignments")
+@SecurityRequirement(name="bearerAuth")
 public class TaskAssignmentController {
 
     private final TaskAssignmentService service;

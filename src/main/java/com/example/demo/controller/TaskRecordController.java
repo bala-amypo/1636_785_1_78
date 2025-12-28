@@ -5,9 +5,10 @@ import com.example.demo.service.TaskRecordService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @RestController
 @RequestMapping("/tasks")
+@SecurityRequirement(name="bearerAuth")
 public class TaskRecordController {
 
     private final TaskRecordService service;
