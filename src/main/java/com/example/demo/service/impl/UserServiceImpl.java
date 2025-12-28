@@ -30,15 +30,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String registerUser(User user) {
-        // 1. Check if user already exists
+        
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new RuntimeException("Username already taken");
         }
 
-        // 2. Encode the password
+        
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        // 3. Save the user
+       
         userRepository.save(user);
 
         return "User registered successfully!";
@@ -46,16 +46,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String loginUser(String username, String password) {
-        // 1. Authenticate via Spring Security
+        
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
         );
 
-        // 2. Fetch User details for the Token
+       
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // 3. Generate and return JWT
+      
         return jwtTokenProvider.generateToken(
                 authentication,
                 user.getId(),
