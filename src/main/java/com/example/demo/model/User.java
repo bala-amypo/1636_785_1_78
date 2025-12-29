@@ -16,14 +16,14 @@ public class User {
 
     private String username;
     private String password;
-    private String email; // make sure this field exists
+    private String email;
     private String role;
 
-    // Default constructor
+    
     public User() {
     }
 
-    // Constructor with fields
+    
     public User(String username, String password, String email, String role) {
         this.username = username;
         this.password = password;
@@ -31,7 +31,7 @@ public class User {
         this.role = role;
     }
 
-    // Getters and Setters
+    
     public Long getId() {
         return id;
     }

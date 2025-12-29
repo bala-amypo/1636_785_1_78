@@ -11,7 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component  // <- make sure this is imported correctly
+@Component  
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
@@ -19,12 +19,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        // Example JWT validation logic
+        
         String token = request.getHeader("Authorization");
         if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7);
-            // Validate token and get Authentication object
-            Authentication auth = null; // replace with your actual logic
+            
+            Authentication auth = null; 
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
 

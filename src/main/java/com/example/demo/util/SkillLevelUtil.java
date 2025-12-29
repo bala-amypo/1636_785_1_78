@@ -1,4 +1,4 @@
-// src/main/java/com/example/demo/util/SkillLevelUtil.java
+
 package com.example.demo.util;
 
 public class SkillLevelUtil {

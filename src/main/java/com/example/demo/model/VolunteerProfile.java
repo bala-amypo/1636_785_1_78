@@ -31,7 +31,7 @@ public class VolunteerProfile {
     private String phone;
 
     @Column(nullable = false)
-    private String availabilityStatus; // AVAILABLE / BUSY / INACTIVE
+    private String availabilityStatus; 
 
     private LocalDateTime createdAt;
 
@@ -43,7 +43,7 @@ public class VolunteerProfile {
         }
     }
 
-    // Getters & Setters
+    
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
