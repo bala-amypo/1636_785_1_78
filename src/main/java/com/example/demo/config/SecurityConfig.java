@@ -29,13 +29,13 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Swagger allowed
+               
                 .requestMatchers(
                         "/swagger-ui/**",
                         "/swagger-ui.html",
                         "/v3/api-docs/**"
                 ).permitAll()
-                // EVERYTHING ELSE LOCKED
+                
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter,
