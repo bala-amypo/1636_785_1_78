@@ -1,64 +1,47 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
 
 @Component
-public class JwtTokenProvider {
+public class JwtAuthenticationFilter extends GenericFilter {
 
-    private final Key key;
-    private final long validityInMs;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public JwtTokenProvider(
-            @Value("${jwt.secret}") String secret,
-            @Value("${jwt.expiration}") long validityInMs) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
-        this.validityInMs = validityInMs;
+    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    public String generateToken(Authentication auth, Long userId, String role) {
+    @Override
+    public void doFilter(ServletRequest request,
+                         ServletResponse response,
+                         FilterChain chain)
+            throws IOException, ServletException {
 
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", userId);
-        claims.put("role", role);
-        claims.put("email", auth.getName());
+        HttpServletRequest req = (HttpServletRequest) request;
+        String header = req.getHeader("Authorization");
 
-        Date now = new Date();
-        Date expiry = new Date(now.getTime() + validityInMs);
+        if (header != null && header.startsWith("Bearer ")) {
 
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(auth.getName())
-                .setIssuedAt(now)
-                .setExpiration(expiry)
-                .signWith(key)
-                .compact();
-    }
+            String token = header.substring(7);
 
-    public Claims getAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
+            if (jwtTokenProvider.validateToken(token)) {
 
-    public boolean validateToken(String token) {
-        try {
-            getAllClaims(token);
-            return true;
-        } catch (Exception e) {
-            return false;
+                String email = jwtTokenProvider.getAllClaims(token).getSubject();
+
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(email, null, null);
+
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
         }
+
+        chain.doFilter(request, response);
     }
 }
