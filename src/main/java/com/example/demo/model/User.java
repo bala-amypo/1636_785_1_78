@@ -74,7 +74,7 @@ public class User {
         this.role = role;
     }
 
-    // ✅ toString (DO NOT print password)
+    
     @Override
     public String toString() {
         return "User{" +
