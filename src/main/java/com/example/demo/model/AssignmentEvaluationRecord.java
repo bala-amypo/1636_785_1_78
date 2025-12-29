@@ -60,7 +60,7 @@ public class AssignmentEvaluationRecord {
 
     private String feedback;
 
-    // ✅ default value so mocked save() still works
+    
     private LocalDateTime evaluatedAt = LocalDateTime.now();
 
     @PrePersist
@@ -75,7 +75,7 @@ public class AssignmentEvaluationRecord {
         this.evaluatedAt = LocalDateTime.now();
     }
 
-    // ---------------- GETTERS & SETTERS ----------------
+   
 
     public Long getId() {
         return id;

@@ -23,10 +23,10 @@ public class TaskRecord {
 
     private String requiredSkillLevel;
 
-    private String priority; // LOW / MEDIUM / HIGH
+    private String priority; 
 
-    // ✅ DEFAULT VALUE FIX (IMPORTANT)
-    private String status = "OPEN"; // OPEN / ASSIGNED / CLOSED
+   
+    private String status = "OPEN"; 
 
     private LocalDateTime createdAt;
 
@@ -36,13 +36,12 @@ public class TaskRecord {
             this.createdAt = LocalDateTime.now();
         }
 
-        // safety fallback
+        
         if (this.status == null) {
             this.status = "OPEN";
         }
     }
 
-    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

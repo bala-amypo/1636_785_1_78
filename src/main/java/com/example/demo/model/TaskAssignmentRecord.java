@@ -15,11 +15,11 @@ public class TaskAssignmentRecord {
 
     private Long volunteerId;
 
-    // ✅ default timestamp (mock-safe)
+    
     private LocalDateTime assignedAt = LocalDateTime.now();
 
-    // ✅ default status (mock-safe)
-    private String status = "ACTIVE"; // ACTIVE / COMPLETED / CANCELLED
+    
+    private String status = "ACTIVE"; 
 
     @PrePersist
     public void onCreate() {
@@ -36,7 +36,7 @@ public class TaskAssignmentRecord {
         this.assignedAt = LocalDateTime.now();
     }
 
-    // ---------------- GETTERS & SETTERS ----------------
+   
 
     public Long getId() {
         return id;

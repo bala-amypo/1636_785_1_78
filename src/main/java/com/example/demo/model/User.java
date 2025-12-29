@@ -60,7 +60,7 @@ public class User {
         return email;
     }
 
-    // THIS IS THE METHOD YOUR ERROR MENTIONED
+    
     public void setEmail(String email) {
         this.email = email;
     }
@@ -73,7 +73,7 @@ public class User {
         this.role = role;
     }
 
-    // Optional: toString
+   
     @Override
     public String toString() {
         return "User{" +
